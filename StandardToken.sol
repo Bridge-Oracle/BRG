@@ -1,4 +1,4 @@
-pragma solidity 0.5.8;
+pragma solidity 0.8.8;
 
 import "./BasicToken.sol";
 
@@ -7,10 +7,10 @@ import "./BasicToken.sol";
  * @dev see https://github.com/ethereum/EIPs/issues/20
  */
 
-contract ITRC20 is TRC20Basic {
-    function allowance(address owner, address spender) public view returns (uint256);
-    function approve(address spender, uint256 value) public returns (bool);
-    function transferFrom(address from, address to, uint256 value) public returns (bool);
+abstract contract ITRC20 is TRC20Basic {
+    function allowance(address owner, address spender) virtual public view returns (uint256);
+    function approve(address spender, uint256 value) virtual public returns (bool);
+    function transferFrom(address from, address to, uint256 value) virtual public returns (bool);
     event Approval(address indexed owner, address indexed spender, uint256 value);
 }
 
@@ -20,7 +20,7 @@ contract ITRC20 is TRC20Basic {
  */
 
 contract StandardToken is ITRC20, BasicToken {
-
+    using SafeMath for uint256;
     mapping(address => mapping(address => uint256)) private _allowed;
 
     /**
@@ -29,7 +29,7 @@ contract StandardToken is ITRC20, BasicToken {
      * @param value the amount of tokens to be spent.
      */
 
-    function approve(address spender, uint256 value) public stoppable validRecipient(spender) returns(bool) {
+    function approve(address spender, uint256 value) public override stoppable validRecipient(spender) returns(bool) {
         _approve(msg.sender, spender, value);
         return true;
     }
@@ -46,7 +46,7 @@ contract StandardToken is ITRC20, BasicToken {
      * @param value the amount of tokens to be transferred.
      */
 
-     function transferFrom(address from, address to, uint256 value) public  stoppable validRecipient(to) returns(bool) {
+     function transferFrom(address from, address to, uint256 value) override public    stoppable validRecipient(to) returns(bool) {
         require(_allowed[from][msg.sender] >= value);
         _transfer(from, to, value);
         _approve(from, msg.sender, _allowed[from][msg.sender].sub(value));
@@ -60,7 +60,7 @@ contract StandardToken is ITRC20, BasicToken {
    * @return uint256 specifying the amount of tokens still available for the spender.
    */
 
-    function allowance(address _owner, address _spender) public view returns (uint256) {
+    function allowance(address _owner, address _spender) public override view returns (uint256) {
         return _allowed[_owner][_spender];
     }
     

@@ -1,8 +1,9 @@
-pragma solidity 0.5.8;
+pragma solidity 0.8.8;
 
 import "./SmartToken.sol";
 
 contract BridgeToken is SmartToken {
+    using SafeMath for uint256;
     string private _name;
     string private _symbol;
     uint8 private _decimals;
@@ -10,8 +11,8 @@ contract BridgeToken is SmartToken {
     constructor() public {
         _name = "Bridge Oracle";
         _symbol = "BRG";
-        _decimals = 6;
-        mint(msg.sender, 10000000000e6);
+        _decimals = 18;
+        mint(msg.sender, 10000000000e18);
     }
 
     /**
@@ -81,7 +82,7 @@ contract BridgeToken is SmartToken {
 
 
     function withdrawBNB() public onlyOwner returns(bool) {
-        msg.sender.transfer(address(this).balance);
+        payable(msg.sender).transfer(address(this).balance);
         return true;
     }
 }

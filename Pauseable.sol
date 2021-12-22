@@ -1,4 +1,4 @@
-pragma solidity 0.5.8;
+pragma solidity 0.8.8;
 
 import "./Ownable.sol";
 
@@ -12,7 +12,7 @@ import "./Ownable.sol";
  * simply including this module, only once the modifier is put in place.
  */
 
-contract Pauseable is Ownable {
+abstract contract Pauseable is Ownable {
 
     /**
      * @dev Emitted when the pause is triggered by `owner`.
@@ -32,7 +32,7 @@ contract Pauseable is Ownable {
      * @dev Initializes the contract in unpaused state.
      */
     
-    constructor() internal {
+    constructor()  {
         stopped = false;
     }
 

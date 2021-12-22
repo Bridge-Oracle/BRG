@@ -1,4 +1,4 @@
-pragma solidity 0.5.8;
+pragma solidity 0.8.8;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
@@ -42,7 +42,7 @@ library SafeMath {
      * - Subtraction cannot overflow.
      */
 
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+    function sub(uint256 a, uint256 b) public pure returns (uint256) {
         require(b <= a);
         uint256 c = a - b;
         return c;

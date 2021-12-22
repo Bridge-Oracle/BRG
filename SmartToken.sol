@@ -1,4 +1,4 @@
-pragma solidity 0.5.8;
+pragma solidity 0.8.8;
 
 import "./StandardToken.sol";
 
@@ -7,8 +7,8 @@ import "./StandardToken.sol";
  * @dev see https://github.com/ethereum/EIPs/issues/677
  */
 
-contract ITRC677 is ITRC20 {
-    function transferAndCall(address receiver, uint value, bytes memory data) public returns (bool success);
+abstract contract ITRC677 is ITRC20 {
+    function transferAndCall(address receiver, uint value, bytes memory data) virtual public returns (bool success);
     event Transfer(address indexed from, address indexed to, uint256 value, bytes data);
 }
 
@@ -17,8 +17,8 @@ contract ITRC677 is ITRC20 {
  * @dev see https://github.com/ethereum/EIPs/issues/677
  */
 
-contract TRC677Receiver {
-    function onTokenTransfer(address _sender, uint _value, bytes memory _data) public;
+abstract contract TRC677Receiver {
+    function onTokenTransfer(address _sender, uint _value, bytes memory _data) virtual public;
 }
 
 /**
@@ -35,7 +35,7 @@ contract SmartToken is ITRC677, StandardToken {
      * @param _data extra data to be passed to the receiving contract.
      */
 
-    function transferAndCall(address _to, uint256 _value, bytes memory _data) public validRecipient(_to) returns(bool success) {
+    function transferAndCall(address _to, uint256 _value, bytes memory _data) public override validRecipient(_to) returns(bool success) {
         _transfer(msg.sender, _to, _value);
         emit Transfer(msg.sender, _to, _value, _data);
         if (isContract(_to)) {

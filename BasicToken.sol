@@ -1,4 +1,4 @@
-pragma solidity 0.5.8;
+pragma solidity 0.8.8;
 
 import  "./Pauseable.sol";
 import "./SafeMath.sol";
@@ -9,10 +9,10 @@ import "./SafeMath.sol";
  * @dev see https://github.com/ethereum/EIPs/issues/179
  */
 
-contract TRC20Basic {
+abstract contract TRC20Basic {
     uint public totalSupply;
-    function balanceOf(address who) public view returns (uint256);
-    function transfer(address to, uint256 value) public returns(bool);
+     function balanceOf(address who) virtual public view returns (uint256);
+     function transfer(address to, uint256 value) virtual public returns(bool);
     event Transfer(address indexed from, address indexed to, uint256 value);
 }
 
@@ -35,7 +35,7 @@ contract BasicToken is TRC20Basic, Pauseable {
      * @param value The amount which is transferred.
      */
     
-    function transfer(address to, uint256 value) public stoppable validRecipient(to) returns(bool) {
+    function  transfer(address to, uint256 value) override public  stoppable validRecipient(to) returns(bool) {
         _transfer(msg.sender, to, value);
         return true;
     }
@@ -55,7 +55,7 @@ contract BasicToken is TRC20Basic, Pauseable {
      * @return uint256 representing the amount owned by the address.
      */
 
-   function balanceOf(address _owner) public view returns(uint256) {
+   function balanceOf(address _owner) override public view returns(uint256) {
       return _balances[_owner];
     }
 
